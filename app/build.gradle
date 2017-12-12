@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 26
     defaultConfig {
+        vectorDrawables.useSupportLibrary = true
         applicationId "com.galdino.exemplografico"
         minSdkVersion 16
         targetSdkVersion 26
@@ -19,6 +20,10 @@ android {
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8
+    }
+    dataBinding
+    {
+        enabled true
     }
 }
 

@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">ExemploGrafico</string>
+    <string name="month_1">Jan</string>
+    <string name="month_2">Fev</string>
+    <string name="month_3">Mar</string>
+    <string name="month_4">Abr</string>
+    <string name="month_5">Mai</string>
+    <string name="month_6">Jun</string>
+    <string name="month_7">Jul</string>
+    <string name="month_8">Ago</string>
+    <string name="month_9">Set</string>
+    <string name="month_10">Out</string>
+    <string name="month_11">Nov</string>
+    <string name="month_12">Dez</string>
+
 </resources>

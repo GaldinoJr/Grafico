@@ -2,4 +2,18 @@
 <resources>
     <dimen name="circle_radius">1.5dp</dimen>
     <dimen name="line_width">1dp</dimen>
+    <dimen name="margin_default7x">69dp</dimen>
+    <dimen name="margin_default6x">56dp</dimen>
+    <dimen name="margin_default5x">42dp</dimen>
+    <dimen name="margin_default4x">32dp</dimen>
+    <dimen name="margin_default3x">28dp</dimen>
+    <dimen name="margin_default2x">22dp</dimen>
+    <dimen name="margin_default2_5x">18dp</dimen>
+    <dimen name="margin_default">12dp</dimen>
+    <dimen name="padding_local_information">16dp</dimen>
+    <dimen name="text_size_default2x">14sp</dimen>
+    <dimen name="text_size_default3x">18sp</dimen>
+    <dimen name="text_size_default4x">22sp</dimen>
+    <dimen name="text_size_default5x" >28sp</dimen>
+    <dimen name="text_size_default7x" >42sp</dimen>
 </resources>
