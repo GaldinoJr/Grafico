@@ -10,10 +10,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.ViewTreeObserver;
 
+import com.galdino.exemplografico.adapter.DataMonthListAdapter;
 import com.galdino.exemplografico.adapter.MonthListAdapter;
 import com.galdino.exemplografico.databinding.ActivityMainBinding;
 import com.galdino.exemplografico.domain.Month;
 import com.galdino.exemplografico.domain.MonthList;
+import com.galdino.exemplografico.domain.dataMonth.TipoEntradaSaida;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -23,6 +25,8 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding mBinding;
@@ -35,7 +39,26 @@ public class MainActivity extends AppCompatActivity {
         mBinding = DataBindingUtil.setContentView(this,R.layout.activity_main);
         initializeGraph();
         initializeMonthList();
+        initializeDataMonth();
         //
+    }
+
+    private void initializeDataMonth()
+    {
+        List<TipoEntradaSaida> listEntradaSaida = loadListEntradaSaida();
+        DataMonthListAdapter adapter = new DataMonthListAdapter(listEntradaSaida);
+        mBinding.rvDataMonth.setLayoutManager(new LinearLayoutManager(this));
+        mBinding.rvDataMonth.setAdapter(adapter);
+    }
+
+    private List<TipoEntradaSaida> loadListEntradaSaida() {
+        List<TipoEntradaSaida> listEntradaSaida = new LinkedList<>();
+        listEntradaSaida.add(new TipoEntradaSaida("Cartão de Crédito","15000.50"));
+        listEntradaSaida.add(new TipoEntradaSaida("Cartão de Débito","15000.50"));
+        listEntradaSaida.add(new TipoEntradaSaida("Dinheiro","15000.50"));
+        listEntradaSaida.add(new TipoEntradaSaida("Cheque Bom","15000.50"));
+        listEntradaSaida.add(new TipoEntradaSaida("Cheque Pré","15000.50"));
+        return listEntradaSaida;
     }
 
     private void initializeMonthList() {
