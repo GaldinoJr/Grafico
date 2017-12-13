@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorMonthSelected">#66a7fe</color>
+    <color name="lineGraphHigh">#26476b</color>
+    <color name="lineGraphLow">#4c9ffd</color>
 </resources>

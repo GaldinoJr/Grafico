@@ -2,6 +2,9 @@ package com.galdino.exemplografico;
 
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Paint;
+import android.graphics.Shader;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -131,13 +134,25 @@ public class MainActivity extends AppCompatActivity {
         // create a dataset and give it a type
         set1 = new LineDataSet(yVals, "");
         set1.setFillAlpha(110);
-
-        set1.setColor(Color.BLACK);
+//        getResources().getColor(R.drawable.line_color_background);
+//        set1.setFillDrawable(getResources().getDrawable(R.drawable.line_color_background));
+//        set1.setColor(Color.BLACK);
+//        set1.setColor(Color.BLACK);
         set1.setCircleColor(Color.BLACK);
-        set1.setLineWidth(1f);
+        set1.setLineWidth(2f);
         set1.setDrawCircleHole(false);
         set1.setValueTextSize(9f);
-        set1.setDrawFilled(true);
+        // ativar o fundo
+//        set1.setDrawFilled(true);
+        // cor em degrade da linha
+        Paint paint = mBinding.lineChart.getRenderer().getPaintRender();
+        int height = 200;
+
+        LinearGradient linGrad = new LinearGradient(0, 0, 0, height,
+                getResources().getColor(R.color.lineGraphHigh),
+                getResources().getColor(R.color.lineGraphLow),
+                Shader.TileMode.CLAMP);
+        paint.setShader(linGrad);
 
 
 //        set1.setDrawValues(false);
