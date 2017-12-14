@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private MonthList mMonthList;
     private ObjectFinantialValues objectFinantialValues;
     private int mMonthInitial;
-    private int mInitialIndex;
+    private int mIndexMonthSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,30 +55,30 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializeIndexGraph()
     {
-        mInitialIndex = 0;
-        if(mMonthInitial > 4)
+        mMonthInitial = 1;
+        if(mIndexMonthSelected > 4)
         {
-            if(mMonthInitial >8)
+            if(mIndexMonthSelected >8)
             {
-                mInitialIndex = 9;
+                mMonthInitial = 9;
             }
             else
             {
-                mInitialIndex = 5;
+                mMonthInitial = 5;
             }
         }
     }
 
     private void initializeMockedData()
     {
-        mMonthInitial = 1;
+        mIndexMonthSelected = 0;
         objectFinantialValues = new ObjectFinantialValues();
         DadosPrevisao dadosPrevisao = new DadosPrevisao();
 
         List<Resumo> summaryList = new LinkedList<>();
         for(int i = 0; i < 12; i++)
         {
-            List<TipoEntradaSaida> listEntradaSaida = loadListEntradaSaida();
+            List<TipoEntradaSaida> listEntradaSaida = loadMockedListEntradaSaida(i);
             Resumo resumo = new Resumo();
             resumo.setMes(String.valueOf(i));
             resumo.setTotal(String.valueOf((i+1)*2));
@@ -91,10 +91,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializeDataMonth()
     {
-        selectedMonthList(mMonthInitial);
+        Month monthSelected = new Month(mMonthInitial);
+        selectedMonthList(monthSelected , mMonthInitial);
     }
 
-    private void selectedMonthList(int monthSelected) {
+    private void selectedMonthList(Month selected, int monthSelected)
+    {
+        monthSelected = monthSelected -1;
+        mBinding.tvMonthSelected.setText(selected.getCompleteMonthName());
         if(objectFinantialValues == null ||  objectFinantialValues.getDadosPrevisao() == null||
                 objectFinantialValues.getDadosPrevisao().getResumo() == null||
                 objectFinantialValues.getDadosPrevisao().getResumo().get(monthSelected) == null ||
@@ -108,20 +112,20 @@ public class MainActivity extends AppCompatActivity {
         mBinding.rvDataMonth.setAdapter(adapter);
     }
 
-    private List<TipoEntradaSaida> loadListEntradaSaida() {
+    private List<TipoEntradaSaida> loadMockedListEntradaSaida(int index) {
         List<TipoEntradaSaida> listEntradaSaida = new LinkedList<>();
-        listEntradaSaida.add(new TipoEntradaSaida("Cartão de Crédito","15000.50"));
-        listEntradaSaida.add(new TipoEntradaSaida("Cartão de Débito","15000.50"));
-        listEntradaSaida.add(new TipoEntradaSaida("Dinheiro","15000.50"));
-        listEntradaSaida.add(new TipoEntradaSaida("Cheque Bom","15000.50"));
-        listEntradaSaida.add(new TipoEntradaSaida("Cheque Pré","15000.50"));
+        listEntradaSaida.add(new TipoEntradaSaida("Cartão de Crédito","1500" + String.valueOf(index + 1) + "0.50"));
+        listEntradaSaida.add(new TipoEntradaSaida("Cartão de Débito","1500" + String.valueOf(index + 1) + "0.50"));
+        listEntradaSaida.add(new TipoEntradaSaida("Dinheiro","1500" + String.valueOf(index + 1) +"0.50"));
+        listEntradaSaida.add(new TipoEntradaSaida("Cheque Bom","1500" + String.valueOf(index + 1) +"0.50"));
+        listEntradaSaida.add(new TipoEntradaSaida("Cheque Pré","1500" + String.valueOf(index + 1) +"0.50"));
         return listEntradaSaida;
     }
 
     private void initializeMonthList() {
         mMeasuredWidth = mBinding.getRoot().getMeasuredWidth();
         if (mMeasuredWidth > 0) {
-            inflateMonthList();
+            inflateMonthList(0);
         }
         else
         {
@@ -130,31 +134,50 @@ public class MainActivity extends AppCompatActivity {
                 public boolean onPreDraw() {
                     mBinding.getRoot().getViewTreeObserver().removeOnPreDrawListener(this);
                     mMeasuredWidth = mBinding.getRoot().getMeasuredWidth();
-                    inflateMonthList();
+                    inflateMonthList(0);
                     return true;
                 }
             });
         }
     }
 
-    private void inflateMonthList()
+    private void inflateMonthList(int indexPag)
     {
         mMonthList = new MonthList(this);
-        mMonthList.getFirstListMonths().get(0).setSelected(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false);
+        List<Month> monthList = null;
+        switch (indexPag)
+        {
+            case 0:
+                monthList = mMonthList.getFirstListMonths();
+                break;
+            case 1:
+                monthList = mMonthList.getSecondListMonths();
+                break;
+            case 2:
+                monthList = mMonthList.getThirdListMonths();
+                break;
+        }
+        if(monthList  != null) {
+            monthList.get(indexPag).setSelected(true);
 
-        MonthListAdapter monthListAdapter = new MonthListAdapter(mMeasuredWidth,mMonthList.getFirstListMonths());
-        monthListAdapter.setListener(new MonthListAdapter.Listener() {
-            @Override
-            public void onItemClicked(Month month)
-            {
-                monthListAdapter.disableItemsMenu();
-                monthListAdapter.notifyDataSetChanged();
-                month.setSelected(true);
-            }
-        });
-        mBinding.rvMonth.setLayoutManager(linearLayoutManager);
-        mBinding.rvMonth.setAdapter(monthListAdapter);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+
+            MonthListAdapter monthListAdapter = new MonthListAdapter(mMeasuredWidth, mMonthList.getFirstListMonths());
+            monthListAdapter.setListener(new MonthListAdapter.Listener() {
+                @Override
+                public void onItemClicked(Month month) {
+                    if (month != null) {
+                        monthListAdapter.disableItemsMenu();
+                        monthListAdapter.notifyDataSetChanged();
+                        month.setSelected(true);
+                        mMonthInitial = month.getMonthNumeric();
+                        selectedMonthList(month, mMonthInitial);
+                    }
+                }
+            });
+            mBinding.rvMonth.setLayoutManager(linearLayoutManager);
+            mBinding.rvMonth.setAdapter(monthListAdapter);
+        }
     }
     // region Graph
     private void initializeGraph() {
@@ -193,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        for(int j = mInitialIndex; j < mInitialIndex + 4; j++)
+        for(int j = mMonthInitial; j < mMonthInitial + 4; j++)
         {
             try
             {
