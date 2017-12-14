@@ -11,7 +11,7 @@
         <TextView
             android:id="@+id/tv_label_title"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/height_items_graph_screen"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -25,10 +25,10 @@
 
         <android.support.v7.widget.AppCompatImageView
             android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/height_items_graph_screen"
             style="@style/Widget.AppCompat.Button.Borderless"
             app:srcCompat="@drawable/ic_vector_close_blue"
-            android:padding="15dp"
+            android:padding="12dp"
             />
 
         <RelativeLayout
@@ -50,7 +50,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_month"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/height_items_graph_screen"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rl_graph"
@@ -58,7 +58,7 @@
         <TextView
             android:id="@+id/tv_month_selected"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/height_items_graph_screen"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rv_month"
@@ -73,7 +73,7 @@
         <TextView
             android:id="@+id/tv_label_total"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/height_items_graph_screen"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_month_selected"
             android:text="@string/enter_total"
@@ -87,7 +87,7 @@
         <TextView
             android:id="@+id/tv_total"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/height_items_graph_screen"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_month_selected"
             tools:text="205.000"

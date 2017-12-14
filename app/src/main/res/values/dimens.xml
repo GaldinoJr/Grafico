@@ -16,4 +16,5 @@
     <dimen name="text_size_default4x">22sp</dimen>
     <dimen name="text_size_default5x" >28sp</dimen>
     <dimen name="text_size_default7x" >42sp</dimen>
+    <dimen name="height_items_graph_screen">40dp</dimen>
 </resources>

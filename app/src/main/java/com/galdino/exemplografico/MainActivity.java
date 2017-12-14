@@ -15,6 +15,9 @@ import com.galdino.exemplografico.adapter.MonthListAdapter;
 import com.galdino.exemplografico.databinding.ActivityMainBinding;
 import com.galdino.exemplografico.domain.Month;
 import com.galdino.exemplografico.domain.MonthList;
+import com.galdino.exemplografico.domain.dataMonth.DadosPrevisao;
+import com.galdino.exemplografico.domain.dataMonth.ObjectFinantialValues;
+import com.galdino.exemplografico.domain.dataMonth.Resumo;
 import com.galdino.exemplografico.domain.dataMonth.TipoEntradaSaida;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -25,6 +28,8 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,20 +37,72 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding mBinding;
     private int mMeasuredWidth;
     private MonthList mMonthList;
+    private ObjectFinantialValues objectFinantialValues;
+    private int mMonthInitial;
+    private int mInitialIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this,R.layout.activity_main);
+        initializeMockedData();
+        initializeIndexGraph();
         initializeGraph();
         initializeMonthList();
         initializeDataMonth();
         //
     }
 
+    private void initializeIndexGraph()
+    {
+        mInitialIndex = 0;
+        if(mMonthInitial > 4)
+        {
+            if(mMonthInitial >8)
+            {
+                mInitialIndex = 9;
+            }
+            else
+            {
+                mInitialIndex = 5;
+            }
+        }
+    }
+
+    private void initializeMockedData()
+    {
+        mMonthInitial = 1;
+        objectFinantialValues = new ObjectFinantialValues();
+        DadosPrevisao dadosPrevisao = new DadosPrevisao();
+
+        List<Resumo> summaryList = new LinkedList<>();
+        for(int i = 0; i < 12; i++)
+        {
+            List<TipoEntradaSaida> listEntradaSaida = loadListEntradaSaida();
+            Resumo resumo = new Resumo();
+            resumo.setMes(String.valueOf(i));
+            resumo.setTotal(String.valueOf((i+1)*2));
+            resumo.setTipoEs(listEntradaSaida);
+            summaryList.add(resumo);
+        }
+        dadosPrevisao.setResumo(summaryList);
+        objectFinantialValues.setDadosPrevisao(dadosPrevisao);
+    }
+
     private void initializeDataMonth()
     {
-        List<TipoEntradaSaida> listEntradaSaida = loadListEntradaSaida();
+        selectedMonthList(mMonthInitial);
+    }
+
+    private void selectedMonthList(int monthSelected) {
+        if(objectFinantialValues == null ||  objectFinantialValues.getDadosPrevisao() == null||
+                objectFinantialValues.getDadosPrevisao().getResumo() == null||
+                objectFinantialValues.getDadosPrevisao().getResumo().get(monthSelected) == null ||
+                objectFinantialValues.getDadosPrevisao().getResumo().get(monthSelected).getTipoEs() == null)
+        {
+            return;
+        }
+        List<TipoEntradaSaida> listEntradaSaida = objectFinantialValues.getDadosPrevisao().getResumo().get(monthSelected).getTipoEs();
         DataMonthListAdapter adapter = new DataMonthListAdapter(listEntradaSaida);
         mBinding.rvDataMonth.setLayoutManager(new LinearLayoutManager(this));
         mBinding.rvDataMonth.setAdapter(adapter);
@@ -89,7 +146,8 @@ public class MainActivity extends AppCompatActivity {
         MonthListAdapter monthListAdapter = new MonthListAdapter(mMeasuredWidth,mMonthList.getFirstListMonths());
         monthListAdapter.setListener(new MonthListAdapter.Listener() {
             @Override
-            public void onItemClicked(Month month) {
+            public void onItemClicked(Month month)
+            {
                 monthListAdapter.disableItemsMenu();
                 monthListAdapter.notifyDataSetChanged();
                 month.setSelected(true);
@@ -98,22 +156,14 @@ public class MainActivity extends AppCompatActivity {
         mBinding.rvMonth.setLayoutManager(linearLayoutManager);
         mBinding.rvMonth.setAdapter(monthListAdapter);
     }
-
+    // region Graph
     private void initializeGraph() {
         setData();
-        // style chart
-//        lineChart.setBackgroundColor(Color.TRANSPARENT); //set whatever color you prefer
-//        lineChart.setDrawGridBackground(false);// this is a must
-//        lineChart.setBackgroundColor(getResources().getColor(android.R.color.white)); // use your bg color
-//        lineChart.setDrawGridBackground(false);
-//        lineChart.setDrawBorders(false);
-//        lineChart.setAutoScaleMinMaxEnabled(true);
         // Desliga legenda
         Legend legend = mBinding.lineChart.getLegend();
         legend.setEnabled(false);
         // Desliga descrição
         mBinding.lineChart.getDescription().setEnabled(false);
-
         // remove axis
         YAxis leftAxis = mBinding.lineChart.getAxisLeft();
         leftAxis.setEnabled(false);
@@ -127,12 +177,30 @@ public class MainActivity extends AppCompatActivity {
         mBinding.lineChart.invalidate();
     }
 
-    private ArrayList<Entry> setYAxisValues(){
+    private ArrayList<Entry> setYAxisValues()
+    {
+        if(objectFinantialValues == null || objectFinantialValues.getDadosPrevisao() == null || objectFinantialValues.getDadosPrevisao().getResumo() == null)
+        {
+            return null;
+        }
+        List<Resumo> summaryList = objectFinantialValues.getDadosPrevisao().getResumo();
         ArrayList<Entry> yVals= new ArrayList<>();
-        yVals.add(new Entry(0, 68));
-        yVals.add(new Entry(1, 48));
-        yVals.add(new Entry(2, 90.5f));
-        yVals.add(new Entry(3, 70));
+        Collections.sort(summaryList, new Comparator<Resumo>() {
+            @Override
+            public int compare(Resumo resumo1, Resumo resumo2) {
+                return resumo1.getMesInteger() - resumo2.getMesInteger();
+            }
+        });
+
+
+        for(int j = mInitialIndex; j < mInitialIndex + 4; j++)
+        {
+            try
+            {
+                yVals.add(new Entry(j, Float.parseFloat(summaryList.get(j).getTotal())));
+            }
+            catch (Exception ex){}
+        }
 
         return yVals;
     }
@@ -148,19 +216,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setData() {
-        ArrayList<String> xVals = setXAxisValues();
+//        ArrayList<String> xVals = setXAxisValues();
 
         ArrayList<Entry> yVals = setYAxisValues();
-
+        if(yVals == null || yVals.size() < 1)
+        {
+            return;
+        }
         LineDataSet set1;
 
         // create a dataset and give it a type
         set1 = new LineDataSet(yVals, "");
         set1.setFillAlpha(110);
-//        getResources().getColor(R.drawable.line_color_background);
-//        set1.setFillDrawable(getResources().getDrawable(R.drawable.line_color_background));
-//        set1.setColor(Color.BLACK);
-//        set1.setColor(Color.BLACK);
         set1.setCircleColor(Color.BLACK);
         set1.setLineWidth(2f);
         set1.setDrawCircleHole(false);
@@ -176,12 +243,6 @@ public class MainActivity extends AppCompatActivity {
                 getResources().getColor(R.color.colorBlueDarkGraph),
                 Shader.TileMode.CLAMP);
         paint.setShader(linGrad);
-
-
-//        set1.setDrawValues(false);
-//        set1.setLineWidth(2f);
-//        set1.setDrawCircles(false);
-
         int circleRadiusDimensionPixelSize = getResources().getDimensionPixelSize(R.dimen.circle_radius);
         set1.setCircleRadius(circleRadiusDimensionPixelSize);
         set1.setMode(LineDataSet.Mode.CUBIC_BEZIER);
@@ -192,4 +253,5 @@ public class MainActivity extends AppCompatActivity {
         LineData data = new LineData( dataSets);
         mBinding.lineChart.setData(data);
     }
+    //endregion
 }

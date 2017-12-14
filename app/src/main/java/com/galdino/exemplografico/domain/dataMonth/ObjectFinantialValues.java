@@ -4,7 +4,7 @@ package com.galdino.exemplografico.domain.dataMonth;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Example {
+public class ObjectFinantialValues {
 
     @SerializedName("dadosPrevisao")
     @Expose
