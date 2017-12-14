@@ -16,6 +16,7 @@ import java.util.List;
 public class GraphPageAdapter extends FragmentPagerAdapter
 {
     private List<Resumo> mSummaryList;
+    // todo não esta usando o mes selecionado ainda
     private int mIndexMonthSelected;
     //
     private int mMonthInitial;
@@ -32,23 +33,45 @@ public class GraphPageAdapter extends FragmentPagerAdapter
         initializeIndexGraph(position);
         List<Resumo> resumos ;
         if(mMonthInitial + 4 <=mSummaryList.size()) {
-            resumos = mSummaryList.subList(mMonthInitial, mMonthInitial + 4);
+            resumos = mSummaryList.subList(mMonthInitial-1, mMonthInitial + 3);
         }
         else
         {
-            resumos = mSummaryList.subList(mMonthInitial, mSummaryList.size());
+            resumos = mSummaryList.subList(mMonthInitial-1, mSummaryList.size());
         }
-        return FinancialGraphFragment.newInstance(mIndexMonthSelected,resumos);
+        int indexSelected = getIndexSelected(resumos);
+        FinancialGraphFragment financialGraphFragment = FinancialGraphFragment.newInstance(position, indexSelected,mMonthInitial , resumos);
+        return financialGraphFragment;
+    }
+
+    private int getIndexSelected(List<Resumo> resumos)
+    {
+        int index = 0;
+        for(int i = 0; i < resumos.size(); i++)
+        {
+            if(i+1 == mIndexMonthSelected)
+            {
+                return index;
+            }
+            if(index == 3)
+            {
+                index =0;
+            }
+            else {
+                index++;
+            }
+        }
+        return 0;
     }
 
     private void initializeIndexGraph(int position)
     {
         mMonthInitial = 1;
-        if(position == 2)
+        if(position == 1)
         {
             mMonthInitial = 5;
         }
-        if(position == 3)
+        if(position == 2)
         {
             mMonthInitial = 9;
         }

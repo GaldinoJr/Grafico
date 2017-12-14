@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializeMockedData()
     {
-        mIndexMonthSelected = 0;
+        mIndexMonthSelected = 1;
         objectFinantialValues = new ObjectFinantialValues();
         DadosPrevisao dadosPrevisao = new DadosPrevisao();
 
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         {
             List<TipoEntradaSaida> listEntradaSaida = loadMockedListEntradaSaida(i);
             Resumo resumo = new Resumo();
-            resumo.setMes(String.valueOf(i));
+            resumo.setMes(String.valueOf(i+1));
             resumo.setTotal(String.valueOf((i+1)*2));
             resumo.setTipoEs(listEntradaSaida);
             summaryList.add(resumo);

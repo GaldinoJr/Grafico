@@ -7,11 +7,31 @@
         android:layout_height="match_parent"
         tools:context="com.galdino.exemplografico.MainActivity"
         android:background="@android:color/white">
+        <TextView
+            android:id="@+id/tv_label_title"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/height_items_graph_screen"
+            android:layout_centerHorizontal="true"
+            android:text="@string/summary"
+            android:textAllCaps="true"
+            android:textColor="@color/colorPrimary"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_default3x"
+            android:textStyle="bold"
+            />
 
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="50dp"
+            android:layout_height="@dimen/height_items_graph_screen"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            app:srcCompat="@drawable/ic_vector_close_blue"
+            android:padding="12dp"
+            />
         <android.support.v4.view.ViewPager
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@+id/tv_label_title"
             />
     </RelativeLayout>
 </layout>

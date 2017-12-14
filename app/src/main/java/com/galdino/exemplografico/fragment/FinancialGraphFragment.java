@@ -37,19 +37,25 @@ import java.util.List;
 public class FinancialGraphFragment extends Fragment {
 
     private static final String ARG_MONTH_SELECTED = "ARG_MONTH_SELECTED";
+    private static final String ARG_INDEX_MONTH_SELECTED = "ARG_INDEX_MONTH_SELECTED";
     private static final String ARG_MONTHS = "ARG_MONTHS";
+    private static final String ARG_INDEX_PAGE = "ARG_INDEX_PAGE";
     private FragmentFinantialGraphBinding mBinding;
     //
     private int mIndexMonthSelected;
+    private int mMonthSelected;
+    private int mIndexPage;
     private List<Resumo> mSummaryList;
     //
     private int mMeasuredWidth;
     private MonthList mMonthList;
 
-    public static FinancialGraphFragment newInstance(int indexMonthSelected, List<Resumo> summaryList) {
+    public static FinancialGraphFragment newInstance(int indexPage, int indexMonthSelected, int monthSelected, List<Resumo> summaryList) {
         FinancialGraphFragment fragment = new FinancialGraphFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_MONTH_SELECTED, indexMonthSelected);
+        args.putInt(ARG_INDEX_MONTH_SELECTED, indexMonthSelected);
+        args.putInt(ARG_MONTH_SELECTED, monthSelected);
+        args.putInt(ARG_INDEX_PAGE, indexPage);
         args.putParcelableArrayList(ARG_MONTHS, new ArrayList<>(summaryList));
         fragment.setArguments(args);
         return fragment;
@@ -60,7 +66,9 @@ public class FinancialGraphFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null)
         {
-            mIndexMonthSelected = getArguments().getInt(ARG_MONTH_SELECTED);
+            mIndexMonthSelected = getArguments().getInt(ARG_INDEX_MONTH_SELECTED);
+            mMonthSelected = getArguments().getInt(ARG_MONTH_SELECTED);
+            mIndexPage = getArguments().getInt(ARG_INDEX_PAGE);
             mSummaryList = getArguments().getParcelableArrayList(ARG_MONTHS);
         }
     }
@@ -160,7 +168,7 @@ public class FinancialGraphFragment extends Fragment {
     private void initializeMonthList() {
         mMeasuredWidth = mBinding.getRoot().getMeasuredWidth();
         if (mMeasuredWidth > 0) {
-            inflateMonthList(0);
+            inflateMonthList();
         }
         else
         {
@@ -169,16 +177,16 @@ public class FinancialGraphFragment extends Fragment {
                 public boolean onPreDraw() {
                     mBinding.getRoot().getViewTreeObserver().removeOnPreDrawListener(this);
                     mMeasuredWidth = mBinding.getRoot().getMeasuredWidth();
-                    inflateMonthList(0);
+                    inflateMonthList();
                     return true;
                 }
             });
         }
     }
-    private void inflateMonthList(int indexPag)
+    private void inflateMonthList()
     {
         List<Month> monthList = null;
-        switch (indexPag)
+        switch (mIndexPage)
         {
             case 0:
                 monthList = mMonthList.getFirstListMonths();
@@ -190,20 +198,20 @@ public class FinancialGraphFragment extends Fragment {
                 monthList = mMonthList.getThirdListMonths();
                 break;
         }
-        if(monthList  != null) {
-            monthList.get(indexPag).setSelected(true);
+        if(monthList != null) {
+            monthList.get(mIndexMonthSelected).setSelected(true);
 
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 
-            MonthListAdapter monthListAdapter = new MonthListAdapter(mMeasuredWidth, mMonthList.getFirstListMonths());
+            MonthListAdapter monthListAdapter = new MonthListAdapter(mMeasuredWidth, monthList);
             monthListAdapter.setListener(new MonthListAdapter.Listener() {
                 @Override
                 public void onItemClicked(Month month) {
-                    if (month != null) {
+                    if (month != null && !month.isSelected()) {
                         monthListAdapter.disableItemsMenu();
                         monthListAdapter.notifyDataSetChanged();
                         month.setSelected(true);
-                        selectedMonthList(month, month.getMonthNumeric());
+                        selectedMonthList(month, month.getIndex());
                     }
                 }
             });
@@ -226,7 +234,7 @@ public class FinancialGraphFragment extends Fragment {
 
     private void initializeDataMonth()
     {
-        Month monthSelected = new Month(mIndexMonthSelected);
+        Month monthSelected = new Month(mMonthSelected);
         selectedMonthList(monthSelected , mIndexMonthSelected);
     }
 }

@@ -72,10 +72,10 @@ public class DataMonthListAdapter  extends RecyclerView.Adapter<DataMonthListAda
         {
             super(binding.getRoot());
             mBinding = binding;
-            mBinding.getRoot().setOnClickListener(view -> {
-                int adapterPosition = getAdapterPosition();
-                mListener.onItemClicked(mList.get(adapterPosition));
-            });
+//            mBinding.getRoot().setOnClickListener(view -> {
+//                int adapterPosition = getAdapterPosition();
+//                mListener.onItemClicked(mList.get(adapterPosition));
+//            });
         }
     }
 }

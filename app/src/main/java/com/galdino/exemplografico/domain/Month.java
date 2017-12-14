@@ -57,7 +57,7 @@ public class Month
         this.selected = selected;
     }
 
-    public int getMonthNumeric() {
+    private int getMonthNumeric() {
         monthNumeric = 0;
         switch (month)
         {
@@ -98,11 +98,15 @@ public class Month
                 monthNumeric=12;
                 break;
         }
-        return monthNumeric;
+        return monthNumeric-1;
     }
 
     public String getCompleteMonthName()
     {
+        if(monthNumeric == 0)
+        {
+            getMonthNumeric();
+        }
         String completeMonthName ="";
         switch (monthNumeric)
         {
@@ -144,5 +148,49 @@ public class Month
                 break;
         }
         return completeMonthName;
+    }
+
+    public int getIndex() {
+        int index =0;
+        switch (month)
+        {
+            case DEF_1:
+                index=0;
+                break;
+            case DEF_2:
+                index=1;
+                break;
+            case DEF_3:
+                index=2;
+                break;
+            case DEF_4:
+                index=3;
+                break;
+            case DEF_5:
+                index=0;
+                break;
+            case DEF_6:
+                index=1;
+                break;
+            case DEF_7:
+                index=2;
+                break;
+            case DEF_8:
+                index=3;
+                break;
+            case DEF_9:
+                index=0;
+                break;
+            case DEF_10:
+                index=1;
+                break;
+            case DEF_11:
+                index=2;
+                break;
+            case DEF_12:
+                index=3;
+                break;
+        }
+        return index;
     }
 }
