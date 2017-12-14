@@ -82,7 +82,7 @@ public class MonthListAdapter extends RecyclerView.Adapter<MonthListAdapter.View
             holder.mBinding.tvMonth.setText(month.getMonth());
             if(month.isSelected())
             {
-                holder.mBinding.tvMonth.setTextColor(ContextCompat.getColor(context, R.color.colorMonthSelected));
+                holder.mBinding.tvMonth.setTextColor(ContextCompat.getColor(context, R.color.colorBlueLightGraph));
             }
             else
             {

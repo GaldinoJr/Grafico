@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
 
         LinearGradient linGrad = new LinearGradient(0, 0, 0, height,
                 getResources().getColor(R.color.lineGraphHigh),
-                getResources().getColor(R.color.lineGraphLow),
+                getResources().getColor(R.color.colorBlueDarkGraph),
                 Shader.TileMode.CLAMP);
         paint.setShader(linGrad);
 
