@@ -43,7 +43,6 @@ public class FinancialGraphFragment extends Fragment {
     private int mIndexMonthSelected;
     private List<Resumo> mSummaryList;
     //
-    private int mMonthInitial;
     private int mMeasuredWidth;
     private MonthList mMonthList;
 
@@ -71,27 +70,10 @@ public class FinancialGraphFragment extends Fragment {
                              Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_finantial_graph, container, false);
         mMonthList = new MonthList(getContext());
-        initializeIndexGraph();
         initializeGraph();
         initializeMonthList();
         initializeDataMonth();
         return mBinding.getRoot();
-    }
-
-    private void initializeIndexGraph()
-    {
-        mMonthInitial = 1;
-        if(mIndexMonthSelected > 4)
-        {
-            if(mIndexMonthSelected >8)
-            {
-                mMonthInitial = 9;
-            }
-            else
-            {
-                mMonthInitial = 5;
-            }
-        }
     }
 
     // region Graph
@@ -163,7 +145,7 @@ public class FinancialGraphFragment extends Fragment {
         });
 
 
-        for(int j = mMonthInitial; j < mMonthInitial + 4; j++)
+        for(int j = 0; j < mSummaryList.size(); j++)
         {
             try
             {
@@ -221,8 +203,7 @@ public class FinancialGraphFragment extends Fragment {
                         monthListAdapter.disableItemsMenu();
                         monthListAdapter.notifyDataSetChanged();
                         month.setSelected(true);
-                        mMonthInitial = month.getMonthNumeric();
-                        selectedMonthList(month, mMonthInitial);
+                        selectedMonthList(month, month.getMonthNumeric());
                     }
                 }
             });
@@ -232,7 +213,6 @@ public class FinancialGraphFragment extends Fragment {
     }
     private void selectedMonthList(Month selected, int monthSelected)
     {
-        monthSelected = monthSelected -1;
         mBinding.tvMonthSelected.setText(selected.getCompleteMonthName());
         if(mSummaryList == null ||  mSummaryList.get(monthSelected) == null)
         {
@@ -246,7 +226,7 @@ public class FinancialGraphFragment extends Fragment {
 
     private void initializeDataMonth()
     {
-        Month monthSelected = new Month(mMonthInitial);
-        selectedMonthList(monthSelected , mMonthInitial);
+        Month monthSelected = new Month(mIndexMonthSelected);
+        selectedMonthList(monthSelected , mIndexMonthSelected);
     }
 }

@@ -8,9 +8,10 @@
         tools:context="com.galdino.exemplografico.MainActivity"
         android:background="@android:color/white">
 
-        <FrameLayout android:id="@+id/fl_root"
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewPager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
+            android:layout_height="match_parent"
+            />
     </RelativeLayout>
 </layout>

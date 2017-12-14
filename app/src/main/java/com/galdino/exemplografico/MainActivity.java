@@ -4,14 +4,16 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.galdino.exemplografico.adapter.GraphPageAdapter;
 import com.galdino.exemplografico.databinding.ActivityMainBinding;
 import com.galdino.exemplografico.domain.dataMonth.DadosPrevisao;
 import com.galdino.exemplografico.domain.dataMonth.ObjectFinantialValues;
 import com.galdino.exemplografico.domain.dataMonth.Resumo;
 import com.galdino.exemplografico.domain.dataMonth.TipoEntradaSaida;
-import com.galdino.exemplografico.fragment.FinancialGraphFragment;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,13 +32,27 @@ public class MainActivity extends AppCompatActivity {
         {
             return;
         }
-        List<Resumo> resumo = objectFinantialValues.getDadosPrevisao().getResumo();
-        FinancialGraphFragment financialGraphFragment = FinancialGraphFragment.newInstance(mIndexMonthSelected, resumo);
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fl_root,financialGraphFragment)
-                .commit();
+        orderList();
+        inflatePager();
 
+    }
+
+    private void inflatePager()
+    {
+        List<Resumo> resumoList = objectFinantialValues.getDadosPrevisao().getResumo();
+        GraphPageAdapter graphPageAdapter = new GraphPageAdapter(getSupportFragmentManager(),resumoList,mIndexMonthSelected);
+        mBinding.viewPager.setAdapter(graphPageAdapter);
+        mBinding.viewPager.setOffscreenPageLimit(3);
+    }
+
+    private void orderList()
+    {
+        Collections.sort(objectFinantialValues.getDadosPrevisao().getResumo(), new Comparator<Resumo>() {
+            @Override
+            public int compare(Resumo resumo1, Resumo resumo2) {
+                return resumo1.getMesInteger() - resumo2.getMesInteger();
+            }
+        });
     }
 
     private void initializeMockedData()
