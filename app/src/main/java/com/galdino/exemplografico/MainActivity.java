@@ -13,7 +13,6 @@ import com.galdino.exemplografico.domain.dataMonth.TipoEntradaSaida;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -47,12 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void orderList()
     {
-        Collections.sort(objectFinantialValues.getDadosPrevisao().getResumo(), new Comparator<Resumo>() {
-            @Override
-            public int compare(Resumo resumo1, Resumo resumo2) {
-                return resumo1.getMesInteger() - resumo2.getMesInteger();
-            }
-        });
+        Collections.sort(objectFinantialValues.getDadosPrevisao().getResumo(), (resumo1, resumo2) -> resumo1.getMesInteger() - resumo2.getMesInteger());
     }
 
     private void initializeMockedData()

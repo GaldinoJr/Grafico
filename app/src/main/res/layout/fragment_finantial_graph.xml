@@ -11,7 +11,7 @@
         <RelativeLayout
             android:id="@+id/rl_graph"
             android:layout_width="0dp"
-            android:layout_height="170dp"
+            android:layout_height="150dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -23,12 +23,6 @@
                 android:layout_marginLeft="-10dp"
                 android:layout_marginRight="-10dp"
                 />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="true"
-                android:background="@android:color/transparent"
-                android:focusable="true" />
         </RelativeLayout>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_month"

@@ -1,7 +1,6 @@
 package com.galdino.exemplografico.fragment;
 
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Shader;
@@ -30,8 +29,6 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class FinancialGraphFragment extends Fragment {
@@ -102,6 +99,7 @@ public class FinancialGraphFragment extends Fragment {
         // cor do gráfico
         // Animação
         mBinding.lineChart.animateXY(2000, 2000);
+        mBinding.lineChart.setTouchEnabled(false);
         mBinding.lineChart.invalidate();
     }
     private void setData()
@@ -116,42 +114,39 @@ public class FinancialGraphFragment extends Fragment {
         // create a dataset and give it a type
         set1 = new LineDataSet(yVals, "");
         set1.setFillAlpha(110);
-        set1.setCircleColor(Color.BLACK);
-        set1.setLineWidth(2f);
-        set1.setDrawCircleHole(false);
+        set1.setLineWidth(5f);
         set1.setValueTextSize(9f);
         // ativar o fundo
 //        set1.setDrawFilled(true);
         // cor em degrade da linha
         Paint paint = mBinding.lineChart.getRenderer().getPaintRender();
-        int height = 200;
+        int height = 550;
 
-        LinearGradient linGrad = new LinearGradient(0, 0, 0, height,
-                getResources().getColor(R.color.lineGraphHigh),
+        LinearGradient linGrad = new LinearGradient(height, 0, 0, 0,
+                getResources().getColor(R.color.colorBlueLightGraph),
                 getResources().getColor(R.color.colorBlueDarkGraph),
                 Shader.TileMode.CLAMP);
         paint.setShader(linGrad);
+
         int circleRadiusDimensionPixelSize = getResources().getDimensionPixelSize(R.dimen.circle_radius);
         set1.setCircleRadius(circleRadiusDimensionPixelSize);
-        set1.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+//        set1.setCircleColor(Color.BLACK);
+//        set1.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+//        set1.setDrawCircles(false);
+        set1.setDrawCircleHole(false);
+        set1.setDrawValues(false);
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(set1);
 
-        LineData data = new LineData( dataSets);
+        LineData data = new LineData(dataSets);
         mBinding.lineChart.setData(data);
     }
 
     private ArrayList<Entry> setYAxisValues()
     {
         ArrayList<Entry> yVals= new ArrayList<>();
-        Collections.sort(mSummaryList, new Comparator<Resumo>() {
-            @Override
-            public int compare(Resumo resumo1, Resumo resumo2) {
-                return resumo1.getMesInteger() - resumo2.getMesInteger();
-            }
-        });
-
+//        Collections.sort(mSummaryList, (resumo1, resumo2) -> resumo1.getMesInteger() - resumo2.getMesInteger());
 
         for(int j = 0; j < mSummaryList.size(); j++)
         {

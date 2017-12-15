@@ -2,6 +2,7 @@
 <resources>
     <dimen name="circle_radius">1.5dp</dimen>
     <dimen name="line_width">1dp</dimen>
+    <dimen name="margin_small">4dp</dimen>
     <dimen name="margin_default7x">69dp</dimen>
     <dimen name="margin_default6x">56dp</dimen>
     <dimen name="margin_default5x">42dp</dimen>

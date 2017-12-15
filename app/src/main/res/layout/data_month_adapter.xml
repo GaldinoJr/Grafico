@@ -15,7 +15,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="@+id/iv_losango"
             app:layout_constraintRight_toRightOf="@+id/iv_losango"
-            android:layout_marginTop="@dimen/margin_default"
             />
 
         <android.support.v7.widget.AppCompatImageView
@@ -25,7 +24,7 @@
             app:srcCompat="@drawable/ic_vector_losango"
             app:layout_constraintTop_toBottomOf="@+id/v_line"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginTop="@dimen/margin_default"
+            android:layout_marginTop="@dimen/margin_small"
             android:layout_marginLeft="@dimen/margin_default2x"
             android:layout_marginStart="@dimen/margin_default2x" />
 
@@ -35,6 +34,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toRightOf="@+id/iv_losango"
             app:layout_constraintBottom_toBottomOf="@+id/iv_losango"
+            app:layout_constraintTop_toTopOf="@+id/iv_losango"
             app:layout_constraintRight_toLeftOf="@+id/tv_value"
             android:layout_marginLeft="@dimen/margin_default2x"
             android:layout_marginStart="@dimen/margin_default2x"
@@ -48,6 +48,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="@+id/iv_losango"
+            app:layout_constraintTop_toTopOf="@+id/iv_losango"
             android:layout_marginRight="@dimen/margin_default2x"
             android:layout_marginEnd="@dimen/margin_default2x"
             tools:text="15.000,50"
