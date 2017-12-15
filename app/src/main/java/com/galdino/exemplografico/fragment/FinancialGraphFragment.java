@@ -129,19 +129,32 @@ public class FinancialGraphFragment extends Fragment {
 //        set1.setDrawFilled(true);
         // cor em degrade da linha
         Paint paint = mBinding.lineChart.getRenderer().getPaintRender();
-        int height = 550;
-
-        LinearGradient linGrad = new LinearGradient(height, 0, 0, 0,
-                getResources().getColor(R.color.colorBlueLightGraph),
-                getResources().getColor(R.color.colorBlueDarkGraph),
+        int height = 2000;
+        int initialColor = R.color.color_graph1;
+        int finalColor = R.color.color_graph2;
+        // proble do gradiente entre as páginas resolvido com HSV rodando no eixo V
+        if(mIndexPage == 1)
+        {
+            initialColor = R.color.color_graph2;
+            finalColor = R.color.color_graph3;
+        }
+        else if(mIndexPage == 2)
+        {
+            initialColor = R.color.color_graph3;
+            finalColor = R.color.color_graph4;
+        }
+        LinearGradient linGrad = new LinearGradient(0, 0, height, 0,
+                getResources().getColor(initialColor),
+                getResources().getColor(finalColor),
                 Shader.TileMode.CLAMP);
         paint.setShader(linGrad);
 
         int circleRadiusDimensionPixelSize = getResources().getDimensionPixelSize(R.dimen.circle_radius);
         set1.setCircleRadius(circleRadiusDimensionPixelSize);
 //        set1.setCircleColor(Color.BLACK);
-//        set1.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-//        set1.setDrawCircles(false);
+        // Para ficar redondo
+        set1.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+        set1.setDrawCircles(false);
         set1.setDrawCircleHole(false);
         set1.setDrawValues(false);
 

@@ -8,4 +8,9 @@
     <color name="colorBlueDarkGraph">#2e5580</color>
     <color name="gray">#C5C5C5</color>
     <color name="gray_light">#f2f2f2</color>
+    <color name="color_graph1">#7DB7FF</color>
+    <color name="color_graph2">#6A9CD9</color>
+    <color name="color_graph3">#5177A6</color>
+    <color name="color_graph4">#3E5C80</color>
+
 </resources>
