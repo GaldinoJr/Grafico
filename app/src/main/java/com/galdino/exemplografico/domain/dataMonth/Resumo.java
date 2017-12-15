@@ -57,6 +57,18 @@ public class Resumo implements Parcelable {
         return total;
     }
 
+    public Float getTotalValue()
+    {
+        if(total != null)
+        {
+            return Float.parseFloat(total);
+        }
+        else
+        {
+            return 0f;
+        }
+    }
+
     public void setTotal(String total) {
         this.total = total;
     }

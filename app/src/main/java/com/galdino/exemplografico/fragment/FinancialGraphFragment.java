@@ -37,6 +37,8 @@ public class FinancialGraphFragment extends Fragment {
     private static final String ARG_INDEX_MONTH_SELECTED = "ARG_INDEX_MONTH_SELECTED";
     private static final String ARG_MONTHS = "ARG_MONTHS";
     private static final String ARG_INDEX_PAGE = "ARG_INDEX_PAGE";
+    private static final String ARG_MIN_VALUE = "ARG_MIN_VALUE";
+    private static final String ARG_MAX_VALUE = "ARG_MAX_VALUE";
     private FragmentFinantialGraphBinding mBinding;
     //
     private int mIndexMonthSelected;
@@ -46,13 +48,18 @@ public class FinancialGraphFragment extends Fragment {
     //
     private int mMeasuredWidth;
     private MonthList mMonthList;
+    private Float mMaxValue;
+    private Float mMinValue;
 
-    public static FinancialGraphFragment newInstance(int indexPage, int indexMonthSelected, int monthSelected, List<Resumo> summaryList) {
+    public static FinancialGraphFragment
+    newInstance(int indexPage, int indexMonthSelected, int monthSelected, List<Resumo> summaryList, Float mMinValue, Float mMaxValue) {
         FinancialGraphFragment fragment = new FinancialGraphFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_INDEX_MONTH_SELECTED, indexMonthSelected);
         args.putInt(ARG_MONTH_SELECTED, monthSelected);
         args.putInt(ARG_INDEX_PAGE, indexPage);
+        args.putFloat(ARG_MIN_VALUE, mMinValue);
+        args.putFloat(ARG_MAX_VALUE, mMaxValue);
         args.putParcelableArrayList(ARG_MONTHS, new ArrayList<>(summaryList));
         fragment.setArguments(args);
         return fragment;
@@ -66,6 +73,8 @@ public class FinancialGraphFragment extends Fragment {
             mIndexMonthSelected = getArguments().getInt(ARG_INDEX_MONTH_SELECTED);
             mMonthSelected = getArguments().getInt(ARG_MONTH_SELECTED);
             mIndexPage = getArguments().getInt(ARG_INDEX_PAGE);
+            mMinValue = getArguments().getFloat(ARG_MIN_VALUE);
+            mMaxValue = getArguments().getFloat(ARG_MAX_VALUE);
             mSummaryList = getArguments().getParcelableArrayList(ARG_MONTHS);
         }
     }
@@ -147,16 +156,29 @@ public class FinancialGraphFragment extends Fragment {
     {
         ArrayList<Entry> yVals= new ArrayList<>();
 //        Collections.sort(mSummaryList, (resumo1, resumo2) -> resumo1.getMesInteger() - resumo2.getMesInteger());
-
+        int index = 0;
+        yVals.add(new Entry(index, mMinValue));
+        index++;
+//        if(mIndexPage == 0)
+//        {
+            yVals.add(new Entry(index, Float.parseFloat(mSummaryList.get(0).getTotal())));
+            index++;
+//        }
         for(int j = 0; j < mSummaryList.size(); j++)
         {
             try
             {
-                yVals.add(new Entry(j, Float.parseFloat(mSummaryList.get(j).getTotal())));
+                yVals.add(new Entry(index, Float.parseFloat(mSummaryList.get(j).getTotal())));
+                index++;
             }
             catch (Exception ex){}
         }
-
+        if(mIndexPage == 2)
+        {
+            yVals.add(new Entry(index, Float.parseFloat(mSummaryList.get(mSummaryList.size()-1).getTotal())));
+            index++;
+        }
+        yVals.add(new Entry(index, mMaxValue));
         return yVals;
     }
     //endregion

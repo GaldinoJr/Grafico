@@ -13,6 +13,7 @@ import com.galdino.exemplografico.domain.dataMonth.TipoEntradaSaida;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
     private ObjectFinantialValues objectFinantialValues;
 
     private int mIndexMonthSelected;
+    private Float mMinValue;
+    private Float mMaxValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +42,38 @@ public class MainActivity extends AppCompatActivity {
     private void inflatePager()
     {
         List<Resumo> resumoList = objectFinantialValues.getDadosPrevisao().getResumo();
-        GraphPageAdapter graphPageAdapter = new GraphPageAdapter(getSupportFragmentManager(),resumoList,mIndexMonthSelected);
+        GraphPageAdapter graphPageAdapter = new GraphPageAdapter(getSupportFragmentManager(),resumoList,mIndexMonthSelected, mMinValue, mMaxValue);
         mBinding.viewPager.setAdapter(graphPageAdapter);
         mBinding.viewPager.setOffscreenPageLimit(3);
     }
 
     private void orderList()
     {
-        Collections.sort(objectFinantialValues.getDadosPrevisao().getResumo(), (resumo1, resumo2) -> resumo1.getMesInteger() - resumo2.getMesInteger());
+        List<Resumo> resumos = objectFinantialValues.getDadosPrevisao().getResumo();
+        Collections.sort(resumos, (resumo1, resumo2) -> resumo1.getMesInteger() - resumo2.getMesInteger());
+        Resumo max = Collections.max(resumos, (resumo1, resumo2) -> {
+            if (resumo1.getTotalValue() == resumo2.getTotalValue()) {
+                return 0;
+            } else if (resumo1.getTotalValue() > resumo2.getTotalValue()) {
+                return 1;
+            } else {
+                return -1;
+            }
+        });
+        Resumo min = Collections.min(resumos, new Comparator<Resumo>() {
+            @Override
+            public int compare(Resumo resumo1, Resumo resumo2) {
+                if (resumo1.getTotalValue() == resumo2.getTotalValue()) {
+                    return 0;
+                } else if (resumo1.getTotalValue() > resumo2.getTotalValue()) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            }
+        });
+        mMaxValue = max.getTotalValue();
+        mMinValue = min.getTotalValue();
     }
 
     private void initializeMockedData()

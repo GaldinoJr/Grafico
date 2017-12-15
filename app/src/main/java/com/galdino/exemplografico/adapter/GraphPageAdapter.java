@@ -15,32 +15,49 @@ import java.util.List;
 
 public class GraphPageAdapter extends FragmentPagerAdapter
 {
+    private final Float mMinValue;
+    private final Float mMaxValue;
     private List<Resumo> mSummaryList;
     // todo não esta usando o mes selecionado ainda
     private int mIndexMonthSelected;
     //
     private int mMonthInitial;
 
-    public GraphPageAdapter(FragmentManager fm, List<Resumo> mSummaryList, int mIndexMonthSelected) {
+    public GraphPageAdapter(FragmentManager fm, List<Resumo> mSummaryList, int mIndexMonthSelected, Float minValue, Float maxValue) {
         super(fm);
         this.mSummaryList = mSummaryList;
         this.mIndexMonthSelected = mIndexMonthSelected;
+        this.mMinValue = minValue ;
+        this.mMaxValue = maxValue;
     }
 
     @Override
     public Fragment getItem(int position)
     {
         initializeIndexGraph(position);
-        List<Resumo> resumos ;
-        if(mMonthInitial + 4 <=mSummaryList.size()) {
-            resumos = mSummaryList.subList(mMonthInitial-1, mMonthInitial + 3);
+        List<Resumo> resumos;
+        int indexInitial = mMonthInitial-1;
+//        if(position != 0)
+//        {
+//            indexInitial = mMonthInitial-2;
+//        }
+
+        int indexFinal;
+        if(mMonthInitial + 4 <=mSummaryList.size())
+        {
+            indexFinal = mMonthInitial + 3;
+            if(position != 2)
+            {
+                indexFinal = mMonthInitial + 4;
+            }
+            resumos = mSummaryList.subList(indexInitial, indexFinal);
         }
         else
         {
-            resumos = mSummaryList.subList(mMonthInitial-1, mSummaryList.size());
+            resumos = mSummaryList.subList(indexInitial, mSummaryList.size());
         }
         int indexSelected = getIndexSelected(resumos);
-        FinancialGraphFragment financialGraphFragment = FinancialGraphFragment.newInstance(position, indexSelected,mMonthInitial , resumos);
+        FinancialGraphFragment financialGraphFragment = FinancialGraphFragment.newInstance(position, indexSelected,mMonthInitial , resumos, mMinValue, mMaxValue);
         return financialGraphFragment;
     }
 
